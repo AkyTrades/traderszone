@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Trader applications</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">Traders<span>Zone</span> <span class="tag tag-dim">admin</span></a>
+      <a href="index.html" class="btn btn-ghost nav-cta" style="margin-left:auto">← Back to site</a>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container container-narrow">
+      <p class="section-kicker">Admin</p>
+      <h2>Trader applications.</h2>
+      <p class="section-sub">
+        Paste an application below (the JSON block from the applicant's email),
+        review it, and approve or reject. Approving generates the code entry to
+        paste into <strong>data.js</strong>, which puts the trader live on the site.
+      </p>
+
+      <div class="hero-stats" style="justify-content:flex-start; margin:0 0 2.5rem">
+        <div class="stat"><strong id="statLive">—</strong><span>Live on site</span></div>
+        <div class="stat"><strong id="statPending">—</strong><span>Pending review</span></div>
+        <div class="stat"><strong id="statDecided">—</strong><span>Decided</span></div>
+      </div>
+
+      <div class="form-card">
+        <div class="field field-full">
+          <label for="pasteBox">Paste application JSON</label>
+          <textarea id="pasteBox" placeholder='{ "name": "Max Carter", … }'></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="addBtn">Add to review queue</button>
+          <p class="form-note" id="pasteError"></p>
+        </div>
+      </div>
+
+      <h2 style="margin-top:3rem">Review queue</h2>
+      <p class="section-sub" id="emptyNote">No applications in the queue yet.</p>
+      <div id="queue"></div>
+    </div>
+  </section>
+
+  <script src="data.js"></script>
+  <script>
+    // Applications live in this browser's localStorage — private to this machine.
+    const STORE_KEY = "tz_applications";
+
+    const load = () => JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
+    const save = (apps) => localStorage.setItem(STORE_KEY, JSON.stringify(apps));
+    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+    // ---- Generate the data.js entry for an approved trader ----
+    function slugify(name) {
+      return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    }
+
+    function parseCourseLine(line) {
+      // "Name — $149 — Description" (also tolerates "-" separators)
+      const parts = line.split(/\s*[—–]\s*|\s+-\s+/);
+      const name = (parts[0] || "Untitled course").trim();
+      const priceMatch = line.match(/\$?\s*(\d+)/);
+      const price = priceMatch ? Number(priceMatch[1]) : 0;
+      const desc = (parts[2] || parts.slice(1).filter(p => !/\$?\s*\d+/.test(p)).join(" ") || "").trim();
+      return { name, price, desc };
+    }
+
+    function generateEntry(app) {
+      const entry = {
+        id: slugify(app.name),
+        name: app.name,
+        handle: app.handle || "@" + slugify(app.name).replace(/-/g, ""),
+        market: app.market,
+        style: app.style,
+        years: app.years || 0,
+        members: 0,
+        rating: 0,
+        gradient: ["#22c55e", "#0ea5e9"], // pick a unique pair per trader
+        tagline: app.tagline,
+        bio: app.bio || app.tagline,
+        clips: (app.clips || []).map((url, i) => ({
+          title: `Preview clip ${i + 1}`, // rename after watching
+          length: "0:00",
+          url,
+        })),
+        courses: (app.courses || []).map(parseCourseLine),
+        discord: app.discordName
+          ? { name: app.discordName, price: app.discordPrice || 0, perks: app.discordPerks || [] }
+          : null,
+      };
+      return JSON.stringify(entry, null, 2)
+        .replace(/"([a-zA-Z0-9_]+)":/g, "$1:") + ",";
+    }
+
+    // ---- Rendering ----
+    function render() {
+      const apps = load();
+      const queue = document.getElementById("queue");
+      document.getElementById("statLive").textContent = TRADERS.length;
+      document.getElementById("statPending").textContent = apps.filter(a => a.status === "pending").length;
+      document.getElementById("statDecided").textContent = apps.filter(a => a.status !== "pending").length;
+      document.getElementById("emptyNote").style.display = apps.length ? "none" : "";
+
+      queue.innerHTML = apps.map((a, i) => `
+        <div class="app-card">
+          <div class="app-card-head">
+            <h3>${esc(a.data.name)}</h3>
+            <span class="handle">${esc(a.data.handle || "")}</span>
+            <span class="tag">${esc(a.data.market || "?")}</span>
+            <span class="status-badge status-${a.status}">${a.status}</span>
+          </div>
+          <p class="app-meta">${esc(a.data.tagline || "")}</p>
+          <p class="app-meta">${esc(a.data.style || "")} · ${a.data.years || "?"} yrs · received ${esc(a.data.submittedAt || "?")}</p>
+
+          <div class="app-actions">
+            <button class="btn btn-ghost btn-sm" data-act="toggle" data-i="${i}">Details</button>
+            ${a.status === "pending" ? `
+              <button class="btn btn-primary btn-sm" data-act="approve" data-i="${i}">Approve ✓</button>
+              <button class="btn btn-danger btn-sm" data-act="reject" data-i="${i}">Reject ✗</button>` : ""}
+            ${a.status === "approved" ? `
+              <button class="btn btn-outline btn-sm" data-act="copy" data-i="${i}">Copy data.js entry</button>` : ""}
+            <button class="btn btn-danger btn-sm" data-act="delete" data-i="${i}">Delete</button>
+          </div>
+
+          <div class="app-details" id="details-${i}" hidden>
+            <dl>
+              <dt>Email</dt><dd><a href="mailto:${esc(a.data.email)}">${esc(a.data.email || "—")}</a></dd>
+              <dt>Bio</dt><dd>${esc(a.data.bio || "—")}</dd>
+              <dt>Sample clips</dt><dd>${(a.data.clips || []).map(u => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>`).join("<br>") || "—"}</dd>
+              <dt>Courses</dt><dd>${esc((a.data.courses || []).join("\n") || "—")}</dd>
+              <dt>Discord</dt><dd>${esc(a.data.discordName ? `${a.data.discordName} — $${a.data.discordPrice}/mo\n${(a.data.discordPerks || []).join("\n")}` : "—")}</dd>
+              <dt>Notes</dt><dd>${esc(a.data.notes || "—")}</dd>
+            </dl>
+            ${a.status === "approved" ? `
+              <dt style="color:var(--text-dim);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.06em;margin-top:0.9rem">Generated data.js entry</dt>
+              <pre style="background:var(--surface-2);border-radius:10px;padding:1rem;overflow-x:auto;font-size:0.8rem;margin-top:0.4rem">${esc(generateEntry(a.data))}</pre>` : ""}
+          </div>
+        </div>`).join("");
+    }
+
+    // ---- Actions ----
+    document.getElementById("addBtn").addEventListener("click", () => {
+      const box = document.getElementById("pasteBox");
+      const err = document.getElementById("pasteError");
+      // Accept either raw JSON or a full email containing the JSON block
+      let text = box.value.trim();
+      const m = text.match(/\{[\s\S]*\}/);
+      if (m) text = m[0];
+      try {
+        const data = JSON.parse(text);
+        if (!data.name) throw new Error("missing name");
+        const apps = load();
+        apps.unshift({ status: "pending", data });
+        save(apps);
+        box.value = "";
+        err.textContent = "";
+        render();
+      } catch {
+        err.textContent = "Couldn't parse that — paste the JSON block from the application email.";
+      }
+    });
+
+    document.getElementById("queue").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-act]");
+      if (!btn) return;
+      const i = Number(btn.dataset.i);
+      const apps = load();
+
+      switch (btn.dataset.act) {
+        case "toggle": {
+          const d = document.getElementById(`details-${i}`);
+          d.hidden = !d.hidden;
+          return;
+        }
+        case "approve": apps[i].status = "approved"; break;
+        case "reject": apps[i].status = "rejected"; break;
+        case "delete":
+          if (!confirm(`Delete application from ${apps[i].data.name}?`)) return;
+          apps.splice(i, 1);
+          break;
+        case "copy":
+          navigator.clipboard.writeText(generateEntry(apps[i].data));
+          btn.textContent = "Copied ✓";
+          return;
+      }
+      save(apps);
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

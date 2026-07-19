@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TradersZone — The Trading Education Marketplace</title>
+  <meta name="description" content="Watch free clips from vetted traders, compare their styles, and join their courses and Discords — all through TradersZone." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== Navbar ===== -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">Traders<span>Zone</span></a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#traders">Traders</a>
+        <a href="#how">How it works</a>
+        <a href="#why">Why TradersZone</a>
+        <a href="#apply">For traders</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a href="#traders" class="btn btn-primary nav-cta">Find your trader</a>
+      <div class="menu-wrap">
+        <button class="menu-box" id="menuBox" aria-label="Open quick menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="menu-dropdown" id="menuDropdown" hidden>
+          <a href="apply.html">📝 Apply to get listed</a>
+          <a href="mailto:akytrades@gmail.com?subject=TradersZone%20support">💬 Support</a>
+          <a href="#faq">❓ FAQ</a>
+          <a href="#traders">👥 All traders</a>
+        </div>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container hero-inner">
+      <p class="hero-badge">🎯 One marketplace · Every trading style</p>
+      <h1>Try the mentor <span class="accent">before</span><br />you buy the course.</h1>
+      <p class="hero-sub">
+        TradersZone brings vetted traders into one place. Watch free clips of how
+        each one actually trades and teaches — then join the course or Discord
+        that fits <em>your</em> style, safely through us.
+      </p>
+      <div class="hero-actions">
+        <a href="#traders" class="btn btn-primary btn-lg">Browse traders</a>
+        <a href="#how" class="btn btn-ghost btn-lg">How it works</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><strong id="statTraders">—</strong><span>Vetted traders</span></div>
+        <div class="stat"><strong id="statCourses">—</strong><span>Courses listed</span></div>
+        <div class="stat"><strong id="statClips">—</strong><span>Free preview clips</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== How it works ===== -->
+  <section class="section" id="how">
+    <div class="container">
+      <p class="section-kicker">How it works</p>
+      <h2>Find your fit in three steps.</h2>
+      <div class="cards-3 steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Browse vetted traders</h3>
+          <p>Every trader on TradersZone is reviewed before listing. Filter by market and style — forex, crypto, futures, options.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Watch free clips</h3>
+          <p>See real lessons and real trade breakdowns from each trader before spending anything. No mystery boxes.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Join through TradersZone</h3>
+          <p>Buy the course or join the Discord through us. One trusted checkout, and we're in your corner if anything goes wrong.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Trader directory ===== -->
+  <section class="section section-alt" id="traders">
+    <div class="container">
+      <p class="section-kicker">The traders</p>
+      <h2>Pick a style that clicks with you.</h2>
+      <p class="section-sub">Every profile has free clips, so you can judge their teaching before you join.</p>
+
+      <div class="filters" id="filters">
+        <button class="chip active" data-market="all">All</button>
+        <button class="chip" data-market="Forex">Forex</button>
+        <button class="chip" data-market="Crypto">Crypto</button>
+        <button class="chip" data-market="Futures">Futures</button>
+        <button class="chip" data-market="Options">Options</button>
+      </div>
+
+      <div class="trader-grid" id="traderGrid">
+        <!-- Rendered by script.js from data.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Why TradersZone ===== -->
+  <section class="section" id="why">
+    <div class="container">
+      <p class="section-kicker">Why through us</p>
+      <h2>A middleman that's actually on your side.</h2>
+      <div class="cards-3">
+        <div class="card">
+          <div class="why-icon">🛡️</div>
+          <h3>Vetted, not viral</h3>
+          <p class="card-desc">We review every trader before they can list — their content, their track record claims, and how they treat members. Follower count buys nothing here.</p>
+        </div>
+        <div class="card">
+          <div class="why-icon">🎬</div>
+          <h3>Preview everything</h3>
+          <p class="card-desc">Free clips from every course and community. You see exactly how a trader teaches and trades before a single dollar moves.</p>
+        </div>
+        <div class="card">
+          <div class="why-icon">🤝</div>
+          <h3>We handle the middle</h3>
+          <p class="card-desc">One checkout, clear pricing, and a real human to contact if a purchase goes wrong. No DMing strangers and hoping.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== For traders ===== -->
+  <section class="section section-alt" id="apply">
+    <div class="container apply-box">
+      <div>
+        <p class="section-kicker">For traders</p>
+        <h2>Got real skill? Get showcased.</h2>
+        <p class="section-sub">
+          If you teach trading and want more of the right students, TradersZone puts
+          your clips, courses, and community in front of people actively looking for
+          your style. We handle the storefront — you focus on trading and teaching.
+        </p>
+        <ul class="card-list">
+          <li>Your own profile page with free preview clips</li>
+          <li>We market the platform, you get the students</li>
+          <li>Simple revenue split — no upfront cost</li>
+        </ul>
+      </div>
+      <div class="apply-cta">
+        <a href="apply.html" class="btn btn-primary btn-lg">Apply to get listed</a>
+        <p class="apply-note">Applications are reviewed manually. Expect a reply within a few days.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section" id="faq">
+    <div class="container container-narrow">
+      <p class="section-kicker">FAQ</p>
+      <h2>Common questions.</h2>
+
+      <details class="faq-item">
+        <summary>What exactly is TradersZone?</summary>
+        <p>A marketplace for trading education. Independent traders list their courses and Discord communities here; you preview their content for free and join the ones you like through us.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How do you vet traders?</summary>
+        <p>Before listing, we review each trader's content quality, the transparency of their claims, and feedback from their existing members. We remove traders who don't hold up.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Why buy through TradersZone instead of directly?</summary>
+        <p>Same price, more protection. You get one trusted checkout, and if a course or community isn't what was advertised, you have us to escalate to instead of an anonymous DM.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Are the free clips really representative?</summary>
+        <p>Yes — clips are pulled from the actual courses and communities, not made-for-marketing trailers. What you see is how they teach.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do any of these traders guarantee profits?</summary>
+        <p>No, and anyone who does gets removed. Trading involves substantial risk of loss. Everything here is education, not financial advice.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section cta">
+    <div class="container">
+      <h2>Your style of trading is out there.</h2>
+      <p class="section-sub">Watch a few clips. You'll know your trader when you see them.</p>
+      <div class="hero-actions">
+        <a href="#traders" class="btn btn-primary btn-lg">Browse traders</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <a href="index.html" class="logo">Traders<span>Zone</span></a>
+        <nav class="footer-links">
+          <a href="#traders">Traders</a>
+          <a href="#how">How it works</a>
+          <a href="#apply">For traders</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+      </div>
+      <p class="disclaimer">
+        <strong>Risk disclaimer:</strong> Trading involves substantial risk and is not suitable for every investor.
+        Past performance is not indicative of future results. TradersZone is an education marketplace —
+        nothing on this site is financial advice, and traders listed here are independent educators, not
+        licensed advisors. Never trade with money you cannot afford to lose.
+      </p>
+      <p class="copyright">© 2026 TradersZone. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

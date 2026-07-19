@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apply to get listed — TradersZone</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">Traders<span>Zone</span></a>
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html#traders">Traders</a>
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#faq">FAQ</a>
+      </nav>
+      <a href="index.html" class="btn btn-ghost nav-cta">← Back to site</a>
+      <div class="menu-wrap">
+        <button class="menu-box" id="menuBox" aria-label="Open quick menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="menu-dropdown" id="menuDropdown" hidden>
+          <a href="apply.html">📝 Apply to get listed</a>
+          <a href="mailto:akytrades@gmail.com?subject=TradersZone%20support">💬 Support</a>
+          <a href="index.html#faq">❓ FAQ</a>
+          <a href="index.html#traders">👥 All traders</a>
+        </div>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container container-narrow">
+      <p class="section-kicker">For traders</p>
+      <h2>Apply to get listed on TradersZone.</h2>
+      <p class="section-sub">
+        Tell us about how you trade and what you offer. Every application is
+        reviewed by a human — expect a reply within a few days.
+      </p>
+
+      <form class="form-card" id="applyForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="fName">Your name *</label>
+            <input id="fName" required placeholder="e.g. Max Carter" />
+          </div>
+          <div class="field">
+            <label for="fHandle">Public handle <span class="hint">(X / YouTube / TikTok)</span></label>
+            <input id="fHandle" placeholder="@MaxFX" />
+          </div>
+          <div class="field">
+            <label for="fEmail">Email *</label>
+            <input id="fEmail" type="email" required placeholder="you@example.com" />
+          </div>
+          <div class="field">
+            <label for="fMarket">Main market *</label>
+            <select id="fMarket" required>
+              <option value="">Select…</option>
+              <option>Forex</option>
+              <option>Crypto</option>
+              <option>Futures</option>
+              <option>Options</option>
+              <option>Stocks</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fStyle">Trading style *</label>
+            <input id="fStyle" required placeholder="e.g. Day trading · Price action" />
+          </div>
+          <div class="field">
+            <label for="fYears">Years trading *</label>
+            <input id="fYears" type="number" min="0" max="60" required placeholder="7" />
+          </div>
+          <div class="field field-full">
+            <label for="fTagline">One-line pitch *</label>
+            <input id="fTagline" required maxlength="90" placeholder="e.g. London session scalps with strict risk rules." />
+          </div>
+          <div class="field field-full">
+            <label for="fBio">About you &amp; how you teach</label>
+            <textarea id="fBio" placeholder="Your background, your approach, what members can expect…"></textarea>
+          </div>
+          <div class="field field-full">
+            <label for="fClips">Links to 2–3 sample clips * <span class="hint">(one per line — YouTube, Vimeo, Drive…)</span></label>
+            <textarea id="fClips" required placeholder="https://youtube.com/watch?v=…&#10;https://youtube.com/watch?v=…"></textarea>
+          </div>
+          <div class="field field-full">
+            <label for="fCourses">Courses you want to list <span class="hint">(one per line: name — price — short description)</span></label>
+            <textarea id="fCourses" placeholder="London Session Playbook — $149 — My complete day-trading system"></textarea>
+          </div>
+          <div class="field">
+            <label for="fDiscordName">Discord community name <span class="hint">(if any)</span></label>
+            <input id="fDiscordName" placeholder="MaxFX Trading Floor" />
+          </div>
+          <div class="field">
+            <label for="fDiscordPrice">Discord monthly price ($)</label>
+            <input id="fDiscordPrice" type="number" min="0" placeholder="39" />
+          </div>
+          <div class="field field-full">
+            <label for="fDiscordPerks">What Discord members get <span class="hint">(one perk per line)</span></label>
+            <textarea id="fDiscordPerks" placeholder="Daily pre-London watchlist&#10;Live trade callouts with reasoning"></textarea>
+          </div>
+          <div class="field field-full">
+            <label for="fNotes">Anything else?</label>
+            <textarea id="fNotes" placeholder="Track record links, member counts, questions…"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg">Submit application</button>
+          <p class="form-note">We only use this to review your listing — no spam.</p>
+        </div>
+      </form>
+
+      <div class="output-panel" id="outputPanel" hidden>
+        <h3>✅ Application ready — one last step</h3>
+        <p class="form-note" id="outputNote">
+          Click the button below to send it to us by email. Your application text is
+          also shown here in case you prefer to copy it and send it another way.
+        </p>
+        <pre id="outputJson"></pre>
+        <div class="form-actions">
+          <a href="#" class="btn btn-primary" id="mailtoBtn">Open email &amp; send</a>
+          <button type="button" class="btn btn-ghost" id="copyBtn">Copy application text</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="copyright">© 2026 TradersZone. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================================
+    // Submission target. Two modes:
+    //  - FORM_ENDPOINT = ""       → applicant sends via their email app (mailto)
+    //  - FORM_ENDPOINT = "https://formspree.io/f/XXXX" → posts directly to your
+    //    inbox via Formspree (free account, paste your form ID here)
+    // ============================================================
+    const FORM_ENDPOINT = "";
+    const APPLICATIONS_EMAIL = "akytrades@gmail.com";
+
+    const form = document.getElementById("applyForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const app = {
+        submittedAt: new Date().toISOString().slice(0, 10),
+        name: document.getElementById("fName").value.trim(),
+        handle: document.getElementById("fHandle").value.trim(),
+        email: document.getElementById("fEmail").value.trim(),
+        market: document.getElementById("fMarket").value,
+        style: document.getElementById("fStyle").value.trim(),
+        years: Number(document.getElementById("fYears").value),
+        tagline: document.getElementById("fTagline").value.trim(),
+        bio: document.getElementById("fBio").value.trim(),
+        clips: document.getElementById("fClips").value.trim().split("\n").map(s => s.trim()).filter(Boolean),
+        courses: document.getElementById("fCourses").value.trim().split("\n").map(s => s.trim()).filter(Boolean),
+        discordName: document.getElementById("fDiscordName").value.trim(),
+        discordPrice: Number(document.getElementById("fDiscordPrice").value) || 0,
+        discordPerks: document.getElementById("fDiscordPerks").value.trim().split("\n").map(s => s.trim()).filter(Boolean),
+        notes: document.getElementById("fNotes").value.trim(),
+      };
+
+      const json = JSON.stringify(app, null, 2);
+
+      if (FORM_ENDPOINT) {
+        const res = await fetch(FORM_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: json,
+        });
+        document.getElementById("outputPanel").hidden = false;
+        document.getElementById("outputJson").textContent = json;
+        document.getElementById("mailtoBtn").style.display = "none";
+        document.getElementById("outputNote").textContent = res.ok
+          ? "Sent! We'll get back to you within a few days."
+          : "Sending failed — please copy the text below and email it to " + APPLICATIONS_EMAIL;
+        return;
+      }
+
+      // mailto fallback — opens the applicant's email app pre-filled
+      const subject = encodeURIComponent(`TradersZone application — ${app.name}`);
+      const body = encodeURIComponent(
+        `Trader application for TradersZone.\n` +
+        `Please keep the JSON below intact — it is read by the review tool.\n\n` +
+        `=== APPLICATION JSON ===\n${json}\n=== END ===\n`
+      );
+      document.getElementById("mailtoBtn").href =
+        `mailto:${APPLICATIONS_EMAIL}?subject=${subject}&body=${body}`;
+      document.getElementById("outputJson").textContent = json;
+      document.getElementById("outputPanel").hidden = false;
+      document.getElementById("outputPanel").scrollIntoView({ behavior: "smooth" });
+    });
+
+    document.getElementById("copyBtn").addEventListener("click", () => {
+      navigator.clipboard.writeText(document.getElementById("outputJson").textContent);
+      document.getElementById("copyBtn").textContent = "Copied ✓";
+    });
+
+    // Mobile nav
+    const navToggle = document.getElementById("navToggle");
+    const navLinks = document.getElementById("navLinks");
+    navToggle.addEventListener("click", () => navLinks.classList.toggle("open"));
+
+    // Quick menu (3-line box) dropdown
+    const menuBox = document.getElementById("menuBox");
+    const menuDropdown = document.getElementById("menuDropdown");
+    menuBox.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menuDropdown.hidden = !menuDropdown.hidden;
+      menuBox.setAttribute("aria-expanded", String(!menuDropdown.hidden));
+    });
+    document.addEventListener("click", (e) => {
+      if (!menuDropdown.hidden && !menuDropdown.contains(e.target)) {
+        menuDropdown.hidden = true;
+        menuBox.setAttribute("aria-expanded", "false");
+      }
+    });
+  </script>
+</body>
+</html>
